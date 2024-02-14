@@ -6,28 +6,41 @@ import (
 )
 
 
-type gateway_handler struct {
+type GatewayHandler struct {
 	task_handler TaskHandlerInterface
 }
 
 
-func (h *handler) HandleFile(ctx *fiber.Ctx) error {
+func (handler *GatewayHandler) HandleFile(ctx *fiber.Ctx) error {
 
 	file, err := c.FormFile("document")
 	if err != nil {
 		return err
 	}
 
-	file_id := uuid.NewString()
+	task_id := uuid.NewString()
 
-	c.SaveFile(file, fmt.Sprintf("./%s", file_id))
-	task_id := task_handler.HandleNewTask(file_id)
+	c.SaveFile(file, fmt.Sprintf("./%s", task_id))
 
-	return ctx.JSON("123")
+	go handler.task_handler.HandleNewTask(task_id)
+
+	response_map := fiber.Map{
+		"status": "PENDING",
+	  }
+	
+	return ctx.JSON(response_map)
 }
 
 
-func (h *handler) CheckTaskStatus(ctx *fiber.Ctx) error {
+func (handler *GatewayHandler) CheckTaskStatus(ctx *fiber.Ctx) error {
+	task_id := ctx.Query("task_id")
+	task_status := handler.task_handler.CheckTaskStatus(task_id)
+
+	response_map := fiber.Map{
+		"status": "PENDING",
+	  }
+
+	return ctx.JSON(response_map)
 }
 
 
