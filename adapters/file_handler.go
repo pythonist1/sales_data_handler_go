@@ -9,14 +9,14 @@ import (
 
 
 type FileHandler struct {
-	file_path string
+	FilePath string
 }
 
 
 func (file_handler FileHandler) ParseFile(file_id string) (map[string]string, error) {
 	raw_data := make(map[string]string)
 
-	path := file_handler.file_path + file_id + ".xlsx"
+	path := file_handler.FilePath + file_id + ".xlsx"
     f, err := excelize.OpenFile(path)
     if err != nil {
         return raw_data, err
@@ -81,23 +81,25 @@ func (file_handler FileHandler) CollectFile(raw_data map[string]string, file_id 
         }
 		f.SetSheetRow("Sheet1", cell, &row)
 	}
-    if err := f.SaveAs(file_handler.file_path + file_id + "_result.xlsx"); err != nil {
+    if err := f.SaveAs(file_handler.FilePath + file_id + "_result.xlsx"); err != nil {
         fmt.Println(err)
     }
 	return true
 }
 
 
-func (file_handler FileHandler) DeleteFiles(file_id string) {
+func (file_handler FileHandler) DeleteFiles(file_id string) bool {
 
-	err := os.Remove(file_handler.file_path + file_id + ".xlsx")
+	err := os.Remove(file_handler.FilePath + file_id + ".xlsx")
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err_2 := os.Remove(file_handler.file_path + file_id + "_result.xlsx")
+	err_2 := os.Remove(file_handler.FilePath + file_id + "_result.xlsx")
 	if err_2 != nil {
 		fmt.Println(err_2)
 	}
+
+	return true
 
 }

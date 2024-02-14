@@ -3,29 +3,33 @@ package gateway
 
 import (
 	"github.com/google/uuid"
+	"github.com/gofiber/fiber/v2"
+	"sales_data_handler/service"
 )
 
 
 type GatewayHandler struct {
-	task_handler TaskHandlerInterface
+	TaskHandler service.TaskHandler
+	FilePath string
 }
 
 
 func (handler *GatewayHandler) HandleFile(ctx *fiber.Ctx) error {
 
-	file, err := c.FormFile("document")
+	file, err := ctx.FormFile("document")
 	if err != nil {
 		return err
 	}
 
 	task_id := uuid.NewString()
 
-	c.SaveFile(file, fmt.Sprintf("./%s", task_id))
+	ctx.SaveFile(file, handler.FilePath + task_id + ".xlsx")
 
-	go handler.task_handler.HandleNewTask(task_id)
+	go handler.TaskHandler.HandleNewTask(task_id)
 
 	response_map := fiber.Map{
 		"status": "PENDING",
+		"task_id": task_id,
 	  }
 	
 	return ctx.JSON(response_map)
@@ -33,21 +37,21 @@ func (handler *GatewayHandler) HandleFile(ctx *fiber.Ctx) error {
 
 
 func (handler *GatewayHandler) CheckTaskStatus(ctx *fiber.Ctx) error {
-	task_id := ctx.Query("task_id")
-	task_status := handler.task_handler.CheckTaskStatus(task_id)
+	task_id := ctx.Params("task_id")
+	task_status := handler.TaskHandler.CheckTaskStatus(task_id)
 
 	response_map := fiber.Map{
-		"status": "PENDING",
+		"status": task_status,
 	  }
 
 	return ctx.JSON(response_map)
 }
 
 
-func (h *handler) GetResultFile(ctx *fiber.Ctx) error {
+func (h *GatewayHandler) GetResultFile(ctx *fiber.Ctx) error {
 	task_id := ctx.Params("task_id")
 
-	go handler.task_handler.DeleteTaskCase(task_id)
+	go h.TaskHandler.DeleteTaskCase(task_id)
 
-	return ctx.Download(fmt.Sprintf("./%s", task_id))
+	return ctx.Download(h.FilePath + task_id + ".xlsx")
 }

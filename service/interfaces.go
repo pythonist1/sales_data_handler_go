@@ -7,8 +7,8 @@ type SalesServiceAdapter interface {
 
 
 type FileHandlerAdapter interface {
-	ParseFile(file_id string) map[string]string
-	CollectFile(map[string]string, file_id string) bool
+	ParseFile(file_id string) (map[string]string, error)
+	CollectFile(map[string]string, string) bool
 	DeleteFiles(file_id string) bool
 }
 
