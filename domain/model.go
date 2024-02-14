@@ -1,5 +1,7 @@
 package domain
 
+import "fmt"
+
 
 type Sale struct {
 	Date string
@@ -17,10 +19,12 @@ type SalesData struct {
 
 
 func (sales_data SalesData) CompleteEmptyDates(additional_data map[string]string) {
+	fmt.Println("Sales group len ", len(sales_data.sales_group))
 	for date, summ := range additional_data {
 		sale := Sale{date, summ}
 		sales_data.sales_group = append(sales_data.sales_group, &sale)
 	}
+	fmt.Println("Sales group len after", len(sales_data.sales_group))
 }
 
 

@@ -53,5 +53,5 @@ func (h *GatewayHandler) GetResultFile(ctx *fiber.Ctx) error {
 
 	go h.TaskHandler.DeleteTaskCase(task_id)
 
-	return ctx.Download(h.FilePath + task_id + ".xlsx")
+	return ctx.Download(h.FilePath + task_id + "_result.xlsx")
 }
