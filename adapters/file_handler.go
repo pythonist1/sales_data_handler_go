@@ -48,13 +48,9 @@ func (file_handler FileHandler) ParseFile(file_id string) (map[string]string, er
 			} else if index == 1 {
 				summ = colCell
 			}
-
-            // fmt.Print(index, " ", colCell, "\t")
         }
 
 		raw_data[date] = summ
-
-        // fmt.Println()
     }
 	return raw_data, err
 

@@ -5,11 +5,11 @@ import (
 	"strconv"
 )
 
-type SalesServiceAdapter struct {
+type FakeSalesServiceAdapter struct {
 }
 
 
-func (adapter SalesServiceAdapter) GetSalesSummByDates(dates []string) map[string]string {
+func (adapter FakeSalesServiceAdapter) GetSalesSummByDates(dates []string) map[string]string {
 	additional_data = make(map[string]string)
 
 	for _, date := range dates {
