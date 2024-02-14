@@ -1,6 +1,9 @@
 package service
 
 
+import "time"
+
+
 type TaskCase struct {
 	task_id string
 	err error
@@ -11,6 +14,7 @@ type TaskHandler struct {
 	sales_data_handler SalesDataHandler
 	task_channel chan TaskCase
 	task_case_collection []*TaskCase
+	delete_case_collection []string
 }
 
 
@@ -22,7 +26,7 @@ const (
 )
 
 
-func (t *TaskHandler) HandleNewTask(task_id string) string {
+func (t *TaskHandler) HandleNewTask(task_id string) {
 	t.sales_data_handler.HandleSalesFile(task_id)
 }
 
@@ -44,6 +48,16 @@ func (t *TaskHandler) CheckTaskStatus(task_id string) task_status string {
 
 
 func (t *TaskHandler) DeleteTaskCase(task_id string) {
+	for index, delete_id := range t.delete_case_collection {
+		if delete_id == task_id {
+			return
+		}
+	}
+
+	t.delete_case_collection = append(t.delete_case_collection, task_id)
+
+	time.Sleep(time.Minute * 5)
+
 	for index, task_case := range t.task_case_collection {
 		if task_case.task_id == task_id {
 			t.sales_data_handler.DeleteFiles(task_id)

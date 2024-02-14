@@ -44,5 +44,10 @@ func (handler *GatewayHandler) CheckTaskStatus(ctx *fiber.Ctx) error {
 }
 
 
-func (h *handler) GetFile(ctx *fiber.Ctx) error {
+func (h *handler) GetResultFile(ctx *fiber.Ctx) error {
+	task_id := ctx.Params("task_id")
+
+	go handler.task_handler.DeleteTaskCase(task_id)
+
+	return ctx.Download(fmt.Sprintf("./%s", task_id))
 }
