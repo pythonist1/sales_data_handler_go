@@ -4,12 +4,12 @@ package gateway
 import (
 	"github.com/google/uuid"
 	"github.com/gofiber/fiber/v2"
-	"sales_data_handler/service"
+	// "sales_data_handler/service"
 )
 
 
 type GatewayHandler struct {
-	TaskHandler service.TaskHandler
+	TaskHandler TaskHandlerInterface
 	FilePath string
 }
 
@@ -36,7 +36,7 @@ func (handler *GatewayHandler) HandleFile(ctx *fiber.Ctx) error {
 }
 
 
-func (handler *GatewayHandler) CheckTaskStatus(ctx *fiber.Ctx) error {
+func (handler *GatewayHandler) CheckStatus(ctx *fiber.Ctx) error {
 	task_id := ctx.Params("task_id")
 	task_status := handler.TaskHandler.CheckTaskStatus(task_id)
 

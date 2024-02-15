@@ -15,7 +15,7 @@ func main() {
 	go gateway_handler.TaskHandler.TaskLoop()
 	gateway_app := fiber.New()
 	gateway_app.Post("/handle_file", gateway_handler.HandleFile)
-	gateway_app.Get("/check_task_status/:task_id", gateway_handler.CheckTaskStatus)
+	gateway_app.Get("/check_task_status/:task_id", gateway_handler.CheckStatus)
 	gateway_app.Get("/get_result/:task_id", gateway_handler.GetResultFile)
 	gateway_app.Listen(":8080")
 }

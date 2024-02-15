@@ -1,6 +1,8 @@
 package domain
 
-import "fmt"
+import (
+	"fmt"
+)
 
 
 type Sale struct {
@@ -18,7 +20,7 @@ type SalesData struct {
 }
 
 
-func (sales_data SalesData) CompleteEmptyDates(additional_data map[string]string) {
+func (sales_data *SalesData) CompleteEmptyDates(additional_data map[string]string) {
 	fmt.Println("Sales group len ", len(sales_data.sales_group))
 	for date, summ := range additional_data {
 		sale := Sale{date, summ}
@@ -28,7 +30,7 @@ func (sales_data SalesData) CompleteEmptyDates(additional_data map[string]string
 }
 
 
-func (sales_data SalesData) GetRawData() map[string]string {
+func (sales_data *SalesData) GetRawData() map[string]string {
 	raw_data := make(map[string]string)
 	for _, sale := range sales_data.sales_group {
 		raw_data[sale.Date] = sale.Summ

@@ -14,7 +14,7 @@ type TaskCase struct {
 
 
 type TaskHandler struct {
-	SalesDataHandler SalesDataHandler
+	SalesDataHandler *SalesDataHandler
 	TaskChannel chan TaskCase
 	task_case_collection []*TaskCase
 	delete_case_collection []string
@@ -22,11 +22,11 @@ type TaskHandler struct {
 
 
 // Enums
-// const (
-// 	Success string = "SUCCESS"
-// 	Pending = "PENDING"
-// 	Error = "ERROR"
-// )
+const (
+	Success string = "SUCCESS"
+	Pending = "PENDING"
+	Error = "ERROR"
+)
 
 
 func (t *TaskHandler) HandleNewTask(task_id string) {
@@ -37,15 +37,14 @@ func (t *TaskHandler) HandleNewTask(task_id string) {
 func (t *TaskHandler) CheckTaskStatus(task_id string) string {
 	for _, task_case := range t.task_case_collection {
 		if task_case.task_id == task_id {
-			fmt.Println("in if")
 			if task_case.err == nil {
-				return "SUCCESS"
+				return Success
 			} else {
-				return "ERROR"
+				return Error
 			}
 		}
 	}
-	return "PENDING"
+	return Pending
 }
 
 
